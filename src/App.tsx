@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Workouts from "./pages/Workouts";
+import WorkoutDetail from "./pages/WorkoutDetail";
 import CreateWorkout from "./pages/CreateWorkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -43,6 +44,11 @@ const App = () => (
               <Route path="/workouts" element={
                 <ProtectedRoute>
                   <Workouts />
+                </ProtectedRoute>
+              } />
+              <Route path="/workouts/:id" element={
+                <ProtectedRoute>
+                  <WorkoutDetail />
                 </ProtectedRoute>
               } />
               <Route path="/create-workout" element={
