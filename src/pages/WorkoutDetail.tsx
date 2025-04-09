@@ -3,11 +3,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, PlayCircle, Edit, Clock, Dumbbell, Calendar, Timer, CheckCircle2, XCircle } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  PlayCircle, 
+  Edit, 
+  Clock, 
+  Dumbbell, 
+  Calendar, 
+  Timer, 
+  CheckCircle2, 
+  XCircle,
+  Info
+} from 'lucide-react';
 import { mockWorkouts } from '@/data/mockWorkouts';
 import { toast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ExerciseImage from '@/components/ExerciseImage';
+import WorkoutProgressChart from '@/components/WorkoutProgressChart';
 
 const WorkoutDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +31,7 @@ const WorkoutDetail = () => {
   const [isActive, setIsActive] = useState(false);
   const [timer, setTimer] = useState(0);
   const [currentExercise, setCurrentExercise] = useState<number | null>(null);
+  const [selectedExerciseTab, setSelectedExerciseTab] = useState<string>("details");
   
   // Timer ref for cleanup
   const intervalRef = useRef<number | null>(null);
@@ -248,6 +263,71 @@ const WorkoutDetail = () => {
         </CardContent>
       </Card>
       
+      {/* Overall Workout Progress Chart */}
+      <Card>
+        <CardContent className="pt-6">
+          <h3 className="text-lg font-semibold mb-4">Antrenman İlerleme Grafiği</h3>
+          <div className="h-[300px] w-full">
+            <ChartContainer
+              config={{
+                weight: {
+                  label: 'Ağırlık (kg)',
+                  color: '#8B5CF6',
+                },
+                sessions: {
+                  label: 'Antrenman Sayısı',
+                  color: '#F97316',
+                },
+                duration: {
+                  label: 'Süre (dk)',
+                  color: '#2DD4BF',
+                }
+              }}
+            >
+              <LineChart 
+                data={[
+                  { month: 'Ocak', weight: 70, sessions: 8, duration: 45 },
+                  { month: 'Şubat', weight: 75, sessions: 12, duration: 50 },
+                  { month: 'Mart', weight: 78, sessions: 15, duration: 55 },
+                  { month: 'Nisan', weight: 80, sessions: 20, duration: 60 },
+                  { month: 'Mayıs', weight: 82, sessions: 22, duration: 65 },
+                ]}
+                margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Legend />
+                <Line
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="weight"
+                  name="Ağırlık (kg)"
+                  stroke="#8B5CF6"
+                  activeDot={{ r: 8 }}
+                />
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="sessions"
+                  name="Antrenman Sayısı"
+                  stroke="#F97316"
+                />
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="duration"
+                  name="Süre (dk)"
+                  stroke="#2DD4BF"
+                />
+              </LineChart>
+            </ChartContainer>
+          </div>
+        </CardContent>
+      </Card>
+      
       {/* Exercises List */}
       <div>
         <h3 className="text-xl font-semibold mb-4">Egzersizler</h3>
@@ -284,60 +364,109 @@ const WorkoutDetail = () => {
                     </div>
                   </div>
                   
-                  {isActive && (
-                    <div className="mt-2">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-[80px]">Set</TableHead>
-                            <TableHead>Durum</TableHead>
-                            <TableHead className="text-right">İşlem</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {Array.from({ length: exercise.sets }).map((_, setIndex) => (
-                            <TableRow key={setIndex}>
-                              <TableCell className="font-medium">{setIndex + 1}</TableCell>
-                              <TableCell>
-                                {exercise.completedSets[setIndex] ? (
-                                  <span className="flex items-center text-green-600">
-                                    <CheckCircle2 className="mr-2 h-4 w-4" />
-                                    Tamamlandı
-                                  </span>
-                                ) : (
-                                  <span className="text-muted-foreground">Bekliyor</span>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <div className="flex items-center justify-end">
-                                  <Checkbox
-                                    id={`exercise-${index}-set-${setIndex}`}
-                                    className="mr-2"
-                                    checked={exercise.completedSets[setIndex]}
-                                    onCheckedChange={() => toggleSetCompletion(index, setIndex)}
-                                  />
-                                  <label 
-                                    htmlFor={`exercise-${index}-set-${setIndex}`}
-                                    className="text-sm cursor-pointer"
-                                  >
-                                    {exercise.completedSets[setIndex] ? 'Tamamlandı' : 'Tamamla'}
-                                  </label>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="mt-2"
-                        onClick={() => setCurrentExercise(index)}
-                      >
-                        Bu Egzersizi Başlat
-                      </Button>
-                    </div>
-                  )}
+                  <Tabs 
+                    defaultValue="details" 
+                    value={selectedExerciseTab}
+                    onValueChange={setSelectedExerciseTab}
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="details">Detaylar</TabsTrigger>
+                      <TabsTrigger value="howto">Nasıl Yapılır</TabsTrigger>
+                      <TabsTrigger value="progress">İlerleme</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="details">
+                      {isActive && (
+                        <div className="mt-2">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead className="w-[80px]">Set</TableHead>
+                                <TableHead>Durum</TableHead>
+                                <TableHead className="text-right">İşlem</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {Array.from({ length: exercise.sets }).map((_, setIndex) => (
+                                <TableRow key={setIndex}>
+                                  <TableCell className="font-medium">{setIndex + 1}</TableCell>
+                                  <TableCell>
+                                    {exercise.completedSets[setIndex] ? (
+                                      <span className="flex items-center text-green-600">
+                                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                                        Tamamlandı
+                                      </span>
+                                    ) : (
+                                      <span className="text-muted-foreground">Bekliyor</span>
+                                    )}
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    <div className="flex items-center justify-end">
+                                      <Checkbox
+                                        id={`exercise-${index}-set-${setIndex}`}
+                                        className="mr-2"
+                                        checked={exercise.completedSets[setIndex]}
+                                        onCheckedChange={() => toggleSetCompletion(index, setIndex)}
+                                      />
+                                      <label 
+                                        htmlFor={`exercise-${index}-set-${setIndex}`}
+                                        className="text-sm cursor-pointer"
+                                      >
+                                        {exercise.completedSets[setIndex] ? 'Tamamlandı' : 'Tamamla'}
+                                      </label>
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="mt-2"
+                            onClick={() => setCurrentExercise(index)}
+                          >
+                            Bu Egzersizi Başlat
+                          </Button>
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="howto">
+                      <div className="mt-4 space-y-4">
+                        <ExerciseImage exerciseName={exercise.name} />
+                        
+                        <div className="mt-4">
+                          <h5 className="font-medium flex items-center mb-2">
+                            <Info className="h-4 w-4 mr-2 text-primary" />
+                            Nasıl Yapılır
+                          </h5>
+                          <div className="text-sm space-y-2">
+                            <p>
+                              <strong>Başlangıç Pozisyonu:</strong> {exercise.name === 'Barbell Squat' ? 
+                                'Ayaklarınızı omuz genişliğinde açın ve barı omuzlarınızın üzerine yerleştirin.' : 
+                                'Uygun başlangıç pozisyonunu alın.'}
+                            </p>
+                            <p>
+                              <strong>Hareket:</strong> {exercise.name === 'Barbell Squat' ? 
+                                'Kalçanızı geriye doğru iterek çömelin, dizlerinizi 90 derece veya daha düşük bir açıya getirin.' : 
+                                'Hareketi kontrollü bir şekilde gerçekleştirin.'}
+                            </p>
+                            <p>
+                              <strong>Önemli Noktalar:</strong> {exercise.name === 'Barbell Squat' ? 
+                                'Sırtınızı düz tutun, dizlerinizin ayak parmaklarınızın ötesine geçmemesine dikkat edin.' : 
+                                'Doğru form ve tekniğe odaklanın.'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="progress">
+                      <WorkoutProgressChart exerciseName={exercise.name} />
+                    </TabsContent>
+                  </Tabs>
                 </div>
               </CardContent>
             </Card>
@@ -349,4 +478,3 @@ const WorkoutDetail = () => {
 };
 
 export default WorkoutDetail;
-

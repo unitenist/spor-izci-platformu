@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export interface WorkoutType {
   id: string;
@@ -20,11 +21,31 @@ interface WorkoutCardProps {
   workout: WorkoutType;
 }
 
+// Map workout types to image URLs
+const workoutTypeImages: Record<string, string> = {
+  'Kardiyo + Güç': '/images/barbell-squat.jpg',
+  'Güç': '/images/shoulder-press.jpg',
+  'Kardiyo': '/images/lunges.jpg',
+  'Esneklik': '/images/plank.jpg',
+  // Default image
+  'default': '/placeholder.svg'
+};
+
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
   const navigate = useNavigate();
+  const imageUrl = workoutTypeImages[workout.type] || workoutTypeImages.default;
   
   return (
-    <Card className="h-full flex flex-col border hover:shadow-md transition-all">
+    <Card className="h-full flex flex-col border hover:shadow-md transition-all overflow-hidden">
+      <div>
+        <AspectRatio ratio={16/9}>
+          <img 
+            src={imageUrl} 
+            alt={workout.name}
+            className="object-cover w-full h-full"
+          />
+        </AspectRatio>
+      </div>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start mb-1">
           <CardTitle className="text-lg font-bold">{workout.name}</CardTitle>
