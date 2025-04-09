@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, PlayCircle, Edit, Clock, Dumbbell, Calendar } from 'lucide-react';
 import { mockWorkouts } from '@/data/mockWorkouts';
+import { toast } from "@/hooks/use-toast";
 
 const WorkoutDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,27 @@ const WorkoutDetail = () => {
       </div>
     );
   }
+
+  // Function to start a workout
+  const startWorkout = () => {
+    // Update the lastPerformed date in the mock data
+    const workoutIndex = mockWorkouts.findIndex(w => w.id === id);
+    if (workoutIndex !== -1) {
+      mockWorkouts[workoutIndex] = {
+        ...mockWorkouts[workoutIndex],
+        lastPerformed: 'Bugün'
+      };
+    }
+    
+    // Show success toast
+    toast({
+      title: "Antrenman başlatıldı!",
+      description: `${workout.name} antrenmanınız başlatıldı.`,
+    });
+    
+    // In a real app, you would navigate to a workout session page
+    // For now, we'll just show the toast
+  };
   
   // Sample exercises for the workout
   const exercises = [
@@ -58,7 +80,7 @@ const WorkoutDetail = () => {
               <Edit className="mr-2 h-4 w-4" />
               Düzenle
             </Button>
-            <Button>
+            <Button onClick={startWorkout}>
               <PlayCircle className="mr-2 h-4 w-4" />
               Antrenmana Başla
             </Button>
