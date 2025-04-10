@@ -94,7 +94,7 @@ const WorkoutDetail = () => {
       reps: '10-12', 
       rest: '60 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1541534741688-49d77a699e1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Dumbbell'ları omuz hizasında tut, avuç içleri öne baksın. Ağırlıkları başının üzerine doğru kaldır. Hareketin sonunda dirsekler tam olarak kilitlenmemeli. Kontrollü şekilde başlangıç pozisyonuna dön."
     },
     { 
@@ -200,10 +200,12 @@ const WorkoutDetail = () => {
   
   // Calculate cycling calories
   const calculateCyclingCalories = () => {
-    // Simple formula: 8 * weight * distance (km) / duration (hours)
+    // More accurate formula: MET * weight * duration (hours)
+    // MET value for moderate cycling is around 8
     if (cyclingDuration > 0) {
       const durationHours = cyclingDuration / 60;
-      const calories = Math.round(8 * currentWeight * cyclingDistance / durationHours);
+      // Using MET-based calculation (MET * weight in kg * duration in hours)
+      const calories = Math.round(8 * currentWeight * durationHours);
       setCyclingCalories(calories);
       
       // Add to total burned calories
