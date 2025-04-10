@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Plus, Search, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ExerciseCard from '@/components/ExerciseCard';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock exercise data
 const exerciseLibrary = [
@@ -36,7 +36,7 @@ const exerciseLibrary = [
     muscleGroup: 'Core',
     difficulty: 'Kolay' as const,
     equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1566241142559-40914b93f62c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
   },
   {
     id: 'e4',
@@ -52,7 +52,7 @@ const exerciseLibrary = [
     muscleGroup: 'Sırt, Biceps',
     difficulty: 'Zor' as const,
     equipment: 'Bar',
-    imageUrl: 'https://images.unsplash.com/photo-1598268030500-e5c118603fdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
   },
   {
     id: 'e6',
