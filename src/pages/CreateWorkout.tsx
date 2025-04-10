@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,7 @@ const exerciseLibrary = [
     muscleGroup: 'Göğüs, Omuz, Triceps',
     difficulty: 'Orta' as const,
     equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1598971639058-b106fbafbcca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
   },
   {
     id: 'e3',
