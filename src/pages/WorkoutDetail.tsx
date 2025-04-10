@@ -8,6 +8,12 @@ import { mockWorkouts } from '@/data/mockWorkouts';
 import { toast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { 
+  ChartContainer, 
+  ChartTooltip, 
+  ChartTooltipContent 
+} from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
 
 const WorkoutDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +41,17 @@ const WorkoutDetail = () => {
     { id: '7', name: 'Plank', sets: 3, reps: '30-60 saniye', rest: '30 saniye', completedSets: [false, false, false] },
     { id: '8', name: 'Leg Raises', sets: 3, reps: '15-20', rest: '30 saniye', completedSets: [false, false, false] },
   ].slice(0, workout?.exercises || 0));
+  
+  // Sample workout progress data for chart
+  const progressData = [
+    { day: 'Pzt', weight: 70, reps: 8 },
+    { day: 'Sal', weight: 72, reps: 9 },
+    { day: 'Çar', weight: 71, reps: 8 },
+    { day: 'Per', weight: 73, reps: 10 },
+    { day: 'Cum', weight: 75, reps: 10 },
+    { day: 'Cmt', weight: 75, reps: 11 },
+    { day: 'Paz', weight: 76, reps: 12 },
+  ];
   
   // Format time for display
   const formatTime = (time: number) => {
@@ -239,6 +256,48 @@ const WorkoutDetail = () => {
           </CardContent>
         </Card>
       )}
+      
+      {/* Progress Chart */}
+      <Card>
+        <CardContent className="pt-6">
+          <h3 className="text-lg font-semibold mb-4">İlerleme Grafiği</h3>
+          <div className="h-[300px]">
+            <ChartContainer
+              id="workout-progress"
+              config={{
+                weight: { label: "Ağırlık (kg)", theme: { light: "#2563eb", dark: "#3b82f6" } },
+                reps: { label: "Tekrar", theme: { light: "#16a34a", dark: "#22c55e" } }
+              }}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={progressData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis yAxisId="left" orientation="left" stroke="#2563eb" />
+                  <YAxis yAxisId="right" orientation="right" stroke="#16a34a" />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Legend />
+                  <Line
+                    yAxisId="left"
+                    type="monotone"
+                    dataKey="weight"
+                    name="Ağırlık"
+                    stroke="var(--color-weight)"
+                    activeDot={{ r: 8 }}
+                  />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="reps"
+                    name="Tekrar"
+                    stroke="var(--color-reps)"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </div>
+        </CardContent>
+      </Card>
       
       {/* Workout Description */}
       <Card>
