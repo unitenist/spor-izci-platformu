@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ const WorkoutDetail = () => {
       reps: '8-10', 
       rest: '90 saniye', 
       completedSets: [false, false, false, false],
-      image: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1567598508481-65985588e295?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Barbell'i omuzlarının üzerine yerleştir. Ayaklar omuz genişliğinde açık olmalı. Dizlerini bükerek kalçanı geriye doğru it. Dizler ayak parmak uçlarını geçmemeli. Sonra başlangıç pozisyonuna geri dön."
     },
     { 
@@ -74,7 +75,7 @@ const WorkoutDetail = () => {
       reps: '10-12', 
       rest: '60 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Sırt üstü bench'e uzan. Dumbbell'ları göğsünün her iki yanına getir. Dirseklerini vücuduna 45° açıyla tut. Ağırlıkları yukarı doğru it ve kontrollü şekilde indir."
     },
     { 
@@ -84,7 +85,7 @@ const WorkoutDetail = () => {
       reps: '8-10', 
       rest: '90 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Bar'a avuç içleri dışa bakacak şekilde asıl. Omuzlarını stabilize et. Kendini yukarı çek, çeneni bar seviyesine getir. Kontrollü şekilde başlangıç pozisyonuna dön."
     },
     { 
@@ -94,7 +95,7 @@ const WorkoutDetail = () => {
       reps: '10-12', 
       rest: '60 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1541534741688-49d77a699e1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Dumbbell'ları omuz hizasında tut, avuç içleri öne baksın. Ağırlıkları başının üzerine doğru kaldır. Hareketin sonunda dirsekler tam olarak kilitlenmemeli. Kontrollü şekilde başlangıç pozisyonuna dön."
     },
     { 
@@ -104,7 +105,7 @@ const WorkoutDetail = () => {
       reps: '10-12', 
       rest: '60 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Ayaklar omuz genişliğinde. Dizleri hafif bük, kalçalardan öne doğru eğil. Sırtı düz tut. Barbell'i vücudunun altında tut ve göğsüne doğru çek. Dirseklerini vücuduna yakın tut. Kontrollü şekilde geri indir."
     },
     { 
@@ -114,7 +115,7 @@ const WorkoutDetail = () => {
       reps: '12-15', 
       rest: '45 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1434608019344-b4fab2ba2e4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Ayakta dik dur. Bir adım öne at ve ön dizini 90° açıyla bük. Arka dizin yere yakın olacak şekilde indir. Ön bacağınla kendini yukarı it ve başlangıç pozisyonuna dön. Her iki bacak için tekrarla."
     },
     { 
@@ -124,7 +125,7 @@ const WorkoutDetail = () => {
       reps: '30-60 saniye', 
       rest: '30 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80', 
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80', 
       instructions: "Dirsekler ve ayak parmakları üzerinde pozisyon al. Dirsekler omuz hizasının altında olmalı. Vücudunu düz bir çizgide tut, kalçaların ne yukarı ne aşağı olmalı. Karın kaslarını sıkı tut ve nefes almaya devam et."
     },
     { 
@@ -134,7 +135,7 @@ const WorkoutDetail = () => {
       reps: '15-20', 
       rest: '30 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Sırt üstü yat, eller vücudun yanında veya kalçanın altında. Bacaklarını düz tutarak, yerden yaklaşık 15 cm yüksekliğe kaldır. Sonra bacaklarını düz tutarak 90 dereceye kadar kaldır. Kontrollü şekilde başlangıç pozisyonuna dön."
     },
   ].slice(0, workout?.exercises || 0));
