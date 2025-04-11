@@ -95,7 +95,7 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
           'Protein açısından zengin gıdaları arttırın (et, tavuk, balık, yumurta, süt ürünleri).',
           'Kompleks karbonhidratlar tüketin (tam tahıllar, patates, pirinç).',
           'Sağlıklı yağlar ekleyin (avokado, fındık, zeytinyağı).',
-          'Protein shake ve smoothie'ler ile ek kalori alın.'
+          'Protein shake ve smoothie\'ler ile ek kalori alın.'
         ]
       };
     } else if (bmi >= 18.5 && bmi < 25) {
