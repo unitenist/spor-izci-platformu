@@ -1,17 +1,19 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Plus, Search, Save } from 'lucide-react';
+import { ArrowLeft, Plus, Search, Save, Dumbbell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ExerciseCard from '@/components/ExerciseCard';
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import RecommendationForm from '@/components/RecommendationForm';
 
-// Mock exercise data
+// Fixed exercise data with reliable images
 const exerciseLibrary = [
   {
     id: 'e1',
@@ -19,7 +21,7 @@ const exerciseLibrary = [
     muscleGroup: 'Bacak',
     difficulty: 'Orta' as const,
     equipment: 'Vücut ağırlığı veya ağırlık',
-    imageUrl: 'https://images.unsplash.com/photo-1584380931214-dbb5b72e7fd0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1604247584233-99c80a8aae2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
   },
   {
     id: 'e2',
@@ -27,7 +29,7 @@ const exerciseLibrary = [
     muscleGroup: 'Göğüs, Omuz, Triceps',
     difficulty: 'Orta' as const,
     equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1598971639058-b08fb0491484?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
   },
   {
     id: 'e3',
@@ -35,7 +37,7 @@ const exerciseLibrary = [
     muscleGroup: 'Core',
     difficulty: 'Kolay' as const,
     equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1566241142559-40084efa3466?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
   },
   {
     id: 'e4',
@@ -43,7 +45,7 @@ const exerciseLibrary = [
     muscleGroup: 'Sırt, Bacak, Core',
     difficulty: 'Zor' as const,
     equipment: 'Ağırlık',
-    imageUrl: 'https://images.unsplash.com/photo-1598266663439-2056e6900339?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
   },
   {
     id: 'e5',
@@ -51,7 +53,7 @@ const exerciseLibrary = [
     muscleGroup: 'Sırt, Biceps',
     difficulty: 'Zor' as const,
     equipment: 'Bar',
-    imageUrl: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1598136490941-30d885318abd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
   },
   {
     id: 'e6',
@@ -59,7 +61,7 @@ const exerciseLibrary = [
     muscleGroup: 'Bacak',
     difficulty: 'Kolay' as const,
     equipment: 'Vücut ağırlığı veya dambıl',
-    imageUrl: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80'
+    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
   },
 ];
 
@@ -70,8 +72,10 @@ const CreateWorkout = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('details');
+  const [showRecommendationForm, setShowRecommendationForm] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const filteredExercises = exerciseLibrary.filter(exercise => 
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -123,14 +127,27 @@ const CreateWorkout = () => {
           </Button>
           <h1 className="text-3xl font-bold">Yeni Antrenman Programı</h1>
         </div>
-        <Button onClick={handleSaveWorkout}>
-          <Save className="mr-2 h-4 w-4" />
-          Kaydet
-        </Button>
+        <div className="flex gap-2 w-full md:w-auto">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowRecommendationForm(true)}
+            className="flex-1 md:flex-none"
+          >
+            <Dumbbell className="mr-2 h-4 w-4" />
+            Öneri Al
+          </Button>
+          <Button 
+            onClick={handleSaveWorkout} 
+            className="flex-1 md:flex-none"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            Kaydet
+          </Button>
+        </div>
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
           <TabsTrigger value="details">Program Detayları</TabsTrigger>
           <TabsTrigger value="exercises">Egzersiz Seçimi ({selectedExercises.length})</TabsTrigger>
         </TabsList>
@@ -204,8 +221,8 @@ const CreateWorkout = () => {
             ))}
           </div>
           
-          <div className="sticky bottom-0 bg-background pt-4 pb-2 border-t">
-            <div className="flex items-center justify-between">
+          <div className={`${isMobile ? 'fixed bottom-0 left-0 right-0 bg-background p-4 border-t shadow-md' : 'sticky bottom-0 bg-background pt-4 pb-2 border-t'}`}>
+            <div className="flex items-center justify-between max-w-screen-lg mx-auto">
               <div>
                 <p className="font-medium">{selectedExercises.length} egzersiz seçildi</p>
                 {selectedExercises.length > 0 && (
@@ -222,6 +239,11 @@ const CreateWorkout = () => {
           </div>
         </TabsContent>
       </Tabs>
+      
+      <RecommendationForm 
+        isOpen={showRecommendationForm} 
+        onClose={() => setShowRecommendationForm(false)} 
+      />
     </div>
   );
 };
