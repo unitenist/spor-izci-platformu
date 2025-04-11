@@ -9,32 +9,32 @@ export interface WorkoutType {
   lastPerformed?: string;
 }
 
-// Mock data for workouts
+// Updated mock data for workouts including equipment-specific workouts
 export const mockWorkouts: WorkoutType[] = [
   {
     id: '1',
-    name: 'Tam Vücut Antrenmanı',
-    description: 'Tüm vücut kaslarını çalıştıran egzersizler',
-    type: 'Kardiyo + Güç',
+    name: 'Barbell Güç Antrenmanı',
+    description: 'Barbell ile yapılan temel güç egzersizleri',
+    type: 'Güç',
     duration: 60,
-    exercises: 8,
+    exercises: 5,
     lastPerformed: '3 gün önce'
   },
   {
     id: '2',
-    name: 'Üst Vücut Güçlendirme',
-    description: 'Üst vücut kaslarını hedefleyen program',
+    name: 'Üst Vücut Bench Press',
+    description: 'Bench kullanarak üst vücut kaslarını hedefleyen program',
     type: 'Güç',
     duration: 45,
     exercises: 6
   },
   {
     id: '3',
-    name: 'Alt Vücut Güçlendirme',
-    description: 'Bacak ve kalça kaslarını geliştirme antrenmanı',
-    type: 'Güç',
-    duration: 50,
-    exercises: 7,
+    name: 'Direnç Bandı Antrenmanı',
+    description: 'Direnç bandı kullanarak tüm vücut egzersizleri',
+    type: 'Güç + Esneklik',
+    duration: 40,
+    exercises: 8,
     lastPerformed: '1 hafta önce'
   },
   {
@@ -47,19 +47,35 @@ export const mockWorkouts: WorkoutType[] = [
   },
   {
     id: '5',
-    name: 'Core Antrenmanı',
-    description: 'Karın, bel ve sırt kaslarını güçlendirme',
-    type: 'Güç',
+    name: 'Core ve Mat Antrenmanı',
+    description: 'Yoga matı kullanarak karın, bel ve sırt kaslarını güçlendirme',
+    type: 'Güç + Esneklik',
     duration: 35,
-    exercises: 8,
+    exercises: 7,
     lastPerformed: '2 gün önce'
   },
   {
     id: '6',
-    name: 'Esneme ve Mobilite',
-    description: 'Esnekliği artıran ve eklem hareketliliğini geliştiren egzersizler',
-    type: 'Esneklik',
+    name: 'Kablo Makinesi Full Body',
+    description: 'Kablo makinesi kullanarak tüm vücut egzersizleri',
+    type: 'Güç',
+    duration: 50,
+    exercises: 8
+  },
+  {
+    id: '7',
+    name: 'Barbell ve Bench Kombinasyonu',
+    description: 'Barbell ve bench press bankı kullanarak üst vücut geliştirme',
+    type: 'Güç',
+    duration: 55,
+    exercises: 6
+  },
+  {
+    id: '8',
+    name: 'Ev Egzersizleri',
+    description: 'Minimal ekipmanla evde yapılabilecek egzersizler',
+    type: 'Kardiyo + Güç',
     duration: 40,
-    exercises: 12
+    exercises: 9
   }
 ];

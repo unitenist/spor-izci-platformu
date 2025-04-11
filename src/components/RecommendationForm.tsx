@@ -24,9 +24,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   Bike, 
   PersonStanding, 
-  Weight, 
+  Dumbbell, 
   ArrowRight,
-  Check 
+  Check,
+  Barbell
 } from 'lucide-react';
 
 type Activity = {
@@ -40,6 +41,8 @@ type RecommendationFormProps = {
   onClose: () => void;
 }
 
+type Equipment = 'barbell' | 'bench' | 'yogamat' | 'cable' | 'bands' | 'none';
+
 const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose }) => {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
@@ -47,12 +50,14 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
   const [activities, setActivities] = useState<Activity[]>([]);
   const [activityType, setActivityType] = useState<'walking' | 'cycling'>('walking');
   const [activityDuration, setActivityDuration] = useState('');
+  const [equipment, setEquipment] = useState<Equipment[]>(['barbell', 'bench']);
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [recommendation, setRecommendation] = useState({
     workoutName: '',
     workoutDescription: '',
     workoutType: '',
     nutritionTips: [] as string[],
+    recommendedExercises: [] as string[],
   });
   
   const { toast } = useToast();
@@ -81,7 +86,31 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
       workoutDescription: '',
       workoutType: '',
       nutritionTips: [] as string[],
+      recommendedExercises: [] as string[],
     };
+    
+    // Generate recommended exercises based on available equipment
+    let exercises: string[] = [];
+    
+    if (equipment.includes('barbell')) {
+      exercises.push('Barbell Squat', 'Deadlift', 'Bench Press', 'Barbell Row', 'Overhead Press');
+    }
+    
+    if (equipment.includes('bench')) {
+      exercises.push('Incline Bench Press', 'Decline Push-ups', 'Dumbbell Fly');
+    }
+    
+    if (equipment.includes('yogamat')) {
+      exercises.push('Plank', 'Push-ups', 'Core Exercises', 'Stretching');
+    }
+    
+    if (equipment.includes('cable')) {
+      exercises.push('Cable Flys', 'Tricep Pushdown', 'Face Pull', 'Cable Curl');
+    }
+    
+    if (equipment.includes('bands')) {
+      exercises.push('Band Pull-Apart', 'Resistance Band Squat', 'Band Bicep Curl', 'Band Shoulder Press');
+    }
     
     // Generate recommendation based on BMI and goal
     if (bmi < 18.5) {
@@ -96,6 +125,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
           'Kompleks karbonhidratlar tüketin (tam tahıllar, patates, pirinç).',
           'Sağlıklı yağlar ekleyin (avokado, fındık, zeytinyağı).',
           'Protein shake ve smoothie\'ler ile ek kalori alın.'
+        ],
+        recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+          'Compound egzersizler (squat, deadlift, bench press)',
+          'Protein ağırlıklı beslenme',
+          'Yüksek hacimli antrenmanlar (8-12 tekrar)'
         ]
       };
     } else if (bmi >= 18.5 && bmi < 25) {
@@ -111,6 +145,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
             'Rafine şeker ve işlenmiş gıdaları sınırlayın.',
             'Sebze ve meyve tüketimini arttırın.',
             'Günde en az 2 litre su için.'
+          ],
+          recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+            'HIIT antrenmanları',
+            'Kardiyo ve direnç kombinasyonu',
+            'Yüksek tekrarlı egzersizler (15-20 tekrar)'
           ]
         };
       } else if (goal === 'muscle-gain') {
@@ -124,6 +163,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
             'Günlük kalori alımınızı %10-15 arttırın.',
             'Antrenman sonrası 30 dakika içinde beslenin.',
             'Kreatin takviyesi düşünebilirsiniz.'
+          ],
+          recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+            'Ağır compound egzersizler',
+            'Hipertrofi odaklı set/tekrar şeması (4 set x 8-12 tekrar)',
+            'Push-Pull-Legs bölünmüş program'
           ]
         };
       } else {
@@ -137,6 +181,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
             'Protein, karbonhidrat ve yağ dengesine dikkat edin.',
             'Mevsimsel sebze ve meyve tüketin.',
             'Aşırı şeker ve tuz tüketiminden kaçının.'
+          ],
+          recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+            'Karışık kardiyovasküler aktiviteler',
+            'Orta ağırlıkta direnç antrenmanları',
+            'Esneklik ve mobilite egzersizleri'
           ]
         };
       }
@@ -152,6 +201,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
           'Her öğünde protein bulundurun.',
           'Sebze tüketimini artırın.',
           'Aralıklı oruç (intermittent fasting) düşünebilirsiniz.'
+        ],
+        recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+          'Yüksek yoğunluklu interval antrenmanları (HIIT)',
+          'Kardiyo temelli egzersizler',
+          'Metabolizmanızı hızlandıran compound hareketler'
         ]
       };
     } else {
@@ -166,6 +220,11 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
           'İşlenmiş gıda ve şekerli içecekleri kesin.',
           'Sebze ve protein ağırlıklı beslenin.',
           'Düzenli öğün saatleri belirleyin ve ara öğünleri sağlıklı atıştırmalıklarla değiştirin.'
+        ],
+        recommendedExercises: exercises.length ? exercises.slice(0, 6) : [
+          'Düşük etkili kardiyovasküler egzersizler (yürüyüş, yüzme)',
+          'Eklem dostu direnç egzersizleri',
+          'Günlük adım sayısını artırma'
         ]
       };
     }
@@ -197,6 +256,14 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
       title: "Aktivite eklendi",
       description: `${activityType === 'walking' ? 'Yürüyüş' : 'Bisiklet'} aktivitesi başarıyla eklendi.`,
     });
+  };
+  
+  const toggleEquipment = (value: Equipment) => {
+    setEquipment(prev => 
+      prev.includes(value)
+        ? prev.filter(item => item !== value)
+        : [...prev, value]
+    );
   };
   
   const acceptRecommendation = () => {
@@ -268,6 +335,54 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
                     <SelectItem value="endurance">Dayanıklılık</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Mevcut Ekipmanlar</Label>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={equipment.includes('barbell') ? "default" : "outline"}
+                    onClick={() => toggleEquipment('barbell')}
+                    className="flex items-center"
+                  >
+                    <Barbell className="mr-1 h-4 w-4" />
+                    Barbell
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={equipment.includes('bench') ? "default" : "outline"}
+                    onClick={() => toggleEquipment('bench')}
+                  >
+                    Bench
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={equipment.includes('yogamat') ? "default" : "outline"}
+                    onClick={() => toggleEquipment('yogamat')}
+                  >
+                    Yoga Matı
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={equipment.includes('cable') ? "default" : "outline"}
+                    onClick={() => toggleEquipment('cable')}
+                  >
+                    Kablo Makinesi
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={equipment.includes('bands') ? "default" : "outline"}
+                    onClick={() => toggleEquipment('bands')}
+                  >
+                    Direnç Bandı
+                  </Button>
+                </div>
               </div>
               
               <div className="space-y-2">
@@ -348,6 +463,15 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
               <div>
                 <h3 className="font-semibold text-lg">{recommendation.workoutName}</h3>
                 <p className="text-muted-foreground">{recommendation.workoutDescription}</p>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold">Önerilen Egzersizler</h4>
+                <ul className="list-disc pl-5 space-y-1 text-sm mt-2">
+                  {recommendation.recommendedExercises.map((exercise, index) => (
+                    <li key={index}>{exercise}</li>
+                  ))}
+                </ul>
               </div>
               
               <div>

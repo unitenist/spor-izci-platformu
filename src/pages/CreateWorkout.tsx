@@ -13,56 +13,88 @@ import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import RecommendationForm from '@/components/RecommendationForm';
 
-// Fixed exercise data with reliable images
+// Updated exercise data with reliable images
 const exerciseLibrary = [
   {
     id: 'e1',
     name: 'Squat',
     muscleGroup: 'Bacak',
     difficulty: 'Orta' as const,
-    equipment: 'Vücut ağırlığı veya ağırlık',
-    imageUrl: 'https://images.unsplash.com/photo-1604247584233-99c80a8aae2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    equipment: 'Barbell, ağırlık',
+    imageUrl: '/lovable-uploads/6901e6cc-56b0-4df1-8efa-94f6c027b836.png'
   },
   {
     id: 'e2',
-    name: 'Push Up',
+    name: 'Bench Press',
     muscleGroup: 'Göğüs, Omuz, Triceps',
     difficulty: 'Orta' as const,
-    equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1598971639058-b08fb0491484?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    equipment: 'Barbell, ağırlık, bench',
+    imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'e3',
     name: 'Plank',
     muscleGroup: 'Core',
     difficulty: 'Kolay' as const,
-    equipment: 'Vücut ağırlığı',
-    imageUrl: 'https://images.unsplash.com/photo-1566241142559-40084efa3466?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    equipment: 'Yoga matı',
+    imageUrl: '/lovable-uploads/5ba4c1ba-b4c4-46a7-9a90-24f79852cf8b.png'
   },
   {
     id: 'e4',
     name: 'Deadlift',
     muscleGroup: 'Sırt, Bacak, Core',
     difficulty: 'Zor' as const,
-    equipment: 'Ağırlık',
-    imageUrl: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    equipment: 'Barbell, ağırlık',
+    imageUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   },
   {
     id: 'e5',
-    name: 'Pull Up',
-    muscleGroup: 'Sırt, Biceps',
-    difficulty: 'Zor' as const,
-    equipment: 'Bar',
-    imageUrl: 'https://images.unsplash.com/photo-1598136490941-30d885318abd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+    name: 'Incline Bench Press',
+    muscleGroup: 'Üst Göğüs, Omuz',
+    difficulty: 'Orta' as const,
+    equipment: 'Bench, barbell, ağırlık',
+    imageUrl: '/lovable-uploads/e8809cb8-10e4-4881-9b2e-bdcad6c68a5e.png'
   },
   {
     id: 'e6',
-    name: 'Lunges',
-    muscleGroup: 'Bacak',
+    name: 'Resistance Band Pull',
+    muscleGroup: 'Sırt, Biceps',
     difficulty: 'Kolay' as const,
-    equipment: 'Vücut ağırlığı veya dambıl',
-    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    equipment: 'Direnç bandı',
+    imageUrl: '/lovable-uploads/6a3de0d1-7b3c-4dcc-a456-079e2ca0eb1d.png'
   },
+  {
+    id: 'e7',
+    name: 'Cable Tricep Extension',
+    muscleGroup: 'Triceps',
+    difficulty: 'Orta' as const,
+    equipment: 'Kablo makinesi',
+    imageUrl: '/lovable-uploads/c9252f5f-a1f8-4727-8647-e0625b6a6168.png'
+  },
+  {
+    id: 'e8',
+    name: 'Barbell Bicep Curl',
+    muscleGroup: 'Biceps',
+    difficulty: 'Orta' as const,
+    equipment: 'Barbell, ağırlık',
+    imageUrl: 'https://images.unsplash.com/photo-1579758629938-03607ccdbaba?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    id: 'e9',
+    name: 'Leg Press',
+    muscleGroup: 'Bacak',
+    difficulty: 'Orta' as const,
+    equipment: 'Ağırlık',
+    imageUrl: 'https://images.unsplash.com/photo-1434682772747-f16d3ea162c3?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    id: 'e10',
+    name: 'Resistance Band Shoulder Press',
+    muscleGroup: 'Omuz',
+    difficulty: 'Orta' as const,
+    equipment: 'Direnç bandı',
+    imageUrl: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  }
 ];
 
 const CreateWorkout = () => {
