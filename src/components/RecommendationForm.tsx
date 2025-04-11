@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   Bike, 
-  Walking, 
+  PersonStanding, 
   Weight, 
   ArrowRight,
   Check 
@@ -280,7 +280,7 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
                     <SelectContent>
                       <SelectItem value="walking">
                         <div className="flex items-center">
-                          <Walking className="mr-2 h-4 w-4" />
+                          <PersonStanding className="mr-2 h-4 w-4" />
                           Yürüyüş
                         </div>
                       </SelectItem>
@@ -311,7 +311,7 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
                       <div key={index} className="flex items-center justify-between text-sm">
                         <div className="flex items-center">
                           {activity.type === 'walking' ? (
-                            <Walking className="mr-2 h-4 w-4" />
+                            <PersonStanding className="mr-2 h-4 w-4" />
                           ) : (
                             <Bike className="mr-2 h-4 w-4" />
                           )}

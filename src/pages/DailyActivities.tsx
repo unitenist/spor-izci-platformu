@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Bike, 
-  Walking, 
+  PersonStanding, 
   Calendar as CalendarIcon, 
   BarChart, 
   Trash2, 
@@ -101,17 +100,16 @@ const DailyActivities = () => {
       return;
     }
     
-    // Calculate approximate calories
     const durationNum = parseInt(duration);
     let calories = 0;
     let distanceNum = distance ? parseFloat(distance) : 0;
     
     if (activityType === 'walking') {
-      calories = durationNum * 5; // Rough estimate
-      if (!distanceNum) distanceNum = durationNum * 0.08; // ~5km/h pace
+      calories = durationNum * 5;
+      if (!distanceNum) distanceNum = durationNum * 0.08;
     } else {
-      calories = durationNum * 7; // Rough estimate
-      if (!distanceNum) distanceNum = durationNum * 0.25; // ~15km/h pace
+      calories = durationNum * 7;
+      if (!distanceNum) distanceNum = durationNum * 0.25;
     }
     
     const newActivity: Activity = {
@@ -144,7 +142,6 @@ const DailyActivities = () => {
     });
   };
   
-  // Group activities by date for chart
   const chartData = activities.reduce((acc: any[], activity) => {
     const date = format(activity.date, 'dd MMM');
     const existingEntry = acc.find(item => item.date === date);
@@ -166,7 +163,6 @@ const DailyActivities = () => {
     return acc;
   }, []);
   
-  // Sort activities by date (newest first)
   const sortedActivities = [...activities].sort((a, b) => 
     b.date.getTime() - a.date.getTime()
   );
@@ -200,7 +196,7 @@ const DailyActivities = () => {
                     <SelectContent>
                       <SelectItem value="walking">
                         <div className="flex items-center">
-                          <Walking className="mr-2 h-4 w-4" />
+                          <PersonStanding className="mr-2 h-4 w-4" />
                           Yürüyüş
                         </div>
                       </SelectItem>
@@ -277,7 +273,7 @@ const DailyActivities = () => {
                     <div className="flex justify-between items-center">
                       <div className="flex items-center">
                         {activity.type === 'walking' ? (
-                          <Walking className="mr-2 h-5 w-5 text-primary" />
+                          <PersonStanding className="mr-2 h-5 w-5 text-primary" />
                         ) : (
                           <Bike className="mr-2 h-5 w-5 text-primary" />
                         )}
