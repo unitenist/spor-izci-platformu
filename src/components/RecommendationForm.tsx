@@ -26,8 +26,7 @@ import {
   PersonStanding, 
   Dumbbell, 
   ArrowRight,
-  Check,
-  Barbell
+  Check
 } from 'lucide-react';
 
 type Activity = {
@@ -347,7 +346,7 @@ const RecommendationForm: React.FC<RecommendationFormProps> = ({ isOpen, onClose
                     onClick={() => toggleEquipment('barbell')}
                     className="flex items-center"
                   >
-                    <Barbell className="mr-1 h-4 w-4" />
+                    <Dumbbell className="mr-1 h-4 w-4" />
                     Barbell
                   </Button>
                   <Button
