@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Dumbbell, Calendar, TrendingUp, Award, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import WorkoutCard, { WorkoutType } from '@/components/WorkoutCard';
+import WorkoutCard from '@/components/WorkoutCard';
+import { WorkoutType } from '@/types/WorkoutTypes';
 
 // Mock data
 const mockWorkouts: WorkoutType[] = [

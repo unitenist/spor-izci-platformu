@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, Calendar, Clock, ArrowRight, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { WorkoutType } from '@/data/mockWorkouts';
+import { WorkoutType } from '@/types/WorkoutTypes';
 
 interface WorkoutCardProps {
   workout: WorkoutType;
