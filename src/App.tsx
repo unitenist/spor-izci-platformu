@@ -13,6 +13,7 @@ import Workouts from "./pages/Workouts";
 import WorkoutDetail from "./pages/WorkoutDetail";
 import CreateWorkout from "./pages/CreateWorkout";
 import DailyActivities from "./pages/DailyActivities";
+import MealPlanner from "./pages/MealPlanner";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Layout from "./components/Layout";
@@ -60,6 +61,11 @@ const App = () => (
               <Route path="/activities" element={
                 <ProtectedRoute>
                   <DailyActivities />
+                </ProtectedRoute>
+              } />
+              <Route path="/meal-planner" element={
+                <ProtectedRoute>
+                  <MealPlanner />
                 </ProtectedRoute>
               } />
             </Route>

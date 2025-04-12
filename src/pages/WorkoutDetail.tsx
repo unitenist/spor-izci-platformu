@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -150,7 +149,7 @@ const WorkoutDetail = () => {
       reps: '15-20', 
       rest: '30 saniye', 
       completedSets: [false, false, false],
-      image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+      image: 'https://images.unsplash.com/photo-1541534741688-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
       instructions: "Sırt üstü yat, eller vücudun yanında veya kalçanın altında. Bacaklarını düz tutarak, yerden yaklaşık 15 cm yüksekliğe kaldır. Sonra bacaklarını düz tutarak 90 dereceye kadar kaldır. Kontrollü şekilde başlangıç pozisyonuna dön."
     },
   ].slice(0, workout?.exercises || 0));
@@ -681,29 +680,164 @@ const WorkoutDetail = () => {
               <CardContent className="pt-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Günlük Beslenme Takibi</h3>
-                  <Button variant="outline" size="sm" onClick={() => setShowMealPlanner(true)}>
-                    <Utensils className="mr-2 h-4 w-4" />
-                    Öğün Planla
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Utensils className="mr-2 h-4 w-4" />
+                        Öğün Planla
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[600px]">
+                      <DialogHeader>
+                        <DialogTitle>Öğün Planla</DialogTitle>
+                        <DialogDescription>
+                          Günlük beslenme planınızı oluşturabilir ve takip edebilirsiniz.
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="space-y-4 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="mealType">Öğün Türü</Label>
+                            <Select defaultValue="Kahvaltı">
+                              <SelectTrigger id="mealType">
+                                <SelectValue placeholder="Öğün türü seçin" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Kahvaltı">Kahvaltı</SelectItem>
+                                <SelectItem value="Öğle Yemeği">Öğle Yemeği</SelectItem>
+                                <SelectItem value="Akşam Yemeği">Akşam Yemeği</SelectItem>
+                                <SelectItem value="Ara Öğün">Ara Öğün</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="mealTime">Öğün Saati</Label>
+                            <Input
+                              id="mealTime"
+                              type="time"
+                              defaultValue="08:00"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="mealName">Yemek Adı</Label>
+                          <Input
+                            id="mealName"
+                            placeholder="Örn: Yulaf Ezmesi, Izgara Tavuk Salatası"
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="calories">Kalori (kcal)</Label>
+                            <Input
+                              id="calories"
+                              type="number"
+                              min={0}
+                              placeholder="350"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="protein">Protein (g)</Label>
+                            <Input
+                              id="protein"
+                              type="number"
+                              min={0}
+                              placeholder="15"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="carbs">Karbonhidrat (g)</Label>
+                            <Input
+                              id="carbs"
+                              type="number"
+                              min={0}
+                              placeholder="40"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="fat">Yağ (g)</Label>
+                            <Input
+                              id="fat"
+                              type="number"
+                              min={0}
+                              placeholder="8"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label>Malzemeler</Label>
+                          <div className="flex flex-wrap gap-2">
+                            {mockMeals[0].ingredients?.map((ingredient, idx) => (
+                              <div key={idx} className="flex items-center bg-muted px-2 py-1 rounded-md">
+                                <span className="text-sm">{ingredient}</span>
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 ml-1">
+                                  <XCircle className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Input
+                              placeholder="Yeni malzeme ekle"
+                              className="w-40"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Button variant="outline" size="sm" className="mr-2">
+                            <HelpCircle className="mr-2 h-4 w-4" />
+                            Yemek API'sinden Ara
+                          </Button>
+                          <span className="text-sm text-muted-foreground">
+                            Gerçek besin verileri için yemek arayın
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <DialogFooter>
+                        <Button variant="outline" className="mr-2">İptal</Button>
+                        <Button onClick={() => {
+                          toast({
+                            title: "Öğün planı oluşturuldu",
+                            description: "Yeni öğün beslenme planınıza eklendi."
+                          });
+                        }}>
+                          Ekle
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Tüketilen Kalori</p>
-                      <div className="flex items-center">
-                        <Utensils className="h-5 w-5 mr-2 text-primary" />
-                        <span className="text-2xl font-semibold">{caloriesConsumed}</span>
-                        <span className="text-sm text-muted-foreground ml-2">kcal</span>
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="caloriesConsumed">Tüketilen Kalori</Label>
+                      <Input
+                        id="caloriesConsumed"
+                        type="number"
+                        value={caloriesConsumed}
+                        onChange={(e) => setCaloriesConsumed(Number(e.target.value))}
+                        className="max-w-[100px]"
+                      />
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Yakılan Kalori</p>
-                      <div className="flex items-center">
-                        <Flame className="h-5 w-5 mr-2 text-orange-500" />
-                        <span className="text-2xl font-semibold">{caloriesBurned}</span>
-                        <span className="text-sm text-muted-foreground ml-2">kcal</span>
-                      </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="caloriesBurned">Yakılan Kalori</Label>
+                      <Input
+                        id="caloriesBurned"
+                        type="number"
+                        value={caloriesBurned}
+                        onChange={(e) => setCaloriesBurned(Number(e.target.value))}
+                        className="max-w-[100px]"
+                      />
                     </div>
                   </div>
                   
