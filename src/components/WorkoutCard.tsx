@@ -3,18 +3,9 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dumbbell, Calendar, Clock, ArrowRight } from 'lucide-react';
+import { Dumbbell, Calendar, Clock, ArrowRight, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-export interface WorkoutType {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-  duration: number;
-  exercises: number;
-  lastPerformed?: string;
-}
+import { WorkoutType } from '@/data/mockWorkouts';
 
 interface WorkoutCardProps {
   workout: WorkoutType;
@@ -50,16 +41,31 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
               <span>Son: {workout.lastPerformed}</span>
             </div>
           )}
+          {workout.difficulty && (
+            <div className="flex items-center col-span-2 mt-1">
+              <span className="text-muted-foreground">Zorluk: {workout.difficulty}</span>
+            </div>
+          )}
         </div>
       </CardContent>
-      <CardFooter className="pt-2">
+      <CardFooter className="pt-2 flex gap-2">
         <Button 
           variant="default" 
-          className="w-full" 
+          className="flex-1" 
           onClick={() => navigate(`/workouts/${workout.id}`)}
         >
           Detaylar
           <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+        <Button 
+          variant="outline" 
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/create-workout?edit=${workout.id}`);
+          }}
+        >
+          <Edit className="h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>

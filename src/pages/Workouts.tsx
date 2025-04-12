@@ -19,6 +19,19 @@ const Workouts = () => {
     workout.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
+  // Filter workouts by type for each tab
+  const strengthWorkouts = filteredWorkouts.filter(workout => 
+    workout.type.toLowerCase().includes('güç')
+  );
+  
+  const cardioWorkouts = filteredWorkouts.filter(workout => 
+    workout.type.toLowerCase().includes('kardiyo')
+  );
+  
+  const flexibilityWorkouts = filteredWorkouts.filter(workout => 
+    workout.type.toLowerCase().includes('esneklik')
+  );
+  
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -86,31 +99,61 @@ const Workouts = () => {
         
         <TabsContent value="strength" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredWorkouts
-              .filter(workout => workout.type.includes('Güç'))
-              .map(workout => (
+            {strengthWorkouts.length > 0 ? (
+              strengthWorkouts.map(workout => (
                 <WorkoutCard key={workout.id} workout={workout} />
-              ))}
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl font-medium text-muted-foreground">
+                  Güç antrenmanı bulunamadı
+                </p>
+                <Button className="mt-4" onClick={() => navigate('/create-workout')}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Yeni Güç Antrenmanı Oluştur
+                </Button>
+              </div>
+            )}
           </div>
         </TabsContent>
         
         <TabsContent value="cardio" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredWorkouts
-              .filter(workout => workout.type.includes('Kardiyo'))
-              .map(workout => (
+            {cardioWorkouts.length > 0 ? (
+              cardioWorkouts.map(workout => (
                 <WorkoutCard key={workout.id} workout={workout} />
-              ))}
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl font-medium text-muted-foreground">
+                  Kardiyo antrenmanı bulunamadı
+                </p>
+                <Button className="mt-4" onClick={() => navigate('/create-workout')}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Yeni Kardiyo Antrenmanı Oluştur
+                </Button>
+              </div>
+            )}
           </div>
         </TabsContent>
         
         <TabsContent value="flexibility" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredWorkouts
-              .filter(workout => workout.type.includes('Esneklik'))
-              .map(workout => (
+            {flexibilityWorkouts.length > 0 ? (
+              flexibilityWorkouts.map(workout => (
                 <WorkoutCard key={workout.id} workout={workout} />
-              ))}
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl font-medium text-muted-foreground">
+                  Esneklik antrenmanı bulunamadı
+                </p>
+                <Button className="mt-4" onClick={() => navigate('/create-workout')}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Yeni Esneklik Antrenmanı Oluştur
+                </Button>
+              </div>
+            )}
           </div>
         </TabsContent>
       </Tabs>
