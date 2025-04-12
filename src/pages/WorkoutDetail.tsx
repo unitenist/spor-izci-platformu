@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -690,4 +691,488 @@ const WorkoutDetail = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Tüketilen Kalori</p>
-                      <div className="
+                      <div className="flex items-center">
+                        <Utensils className="h-5 w-5 mr-2 text-primary" />
+                        <span className="text-2xl font-semibold">{caloriesConsumed}</span>
+                        <span className="text-sm text-muted-foreground ml-2">kcal</span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Yakılan Kalori</p>
+                      <div className="flex items-center">
+                        <Flame className="h-5 w-5 mr-2 text-orange-500" />
+                        <span className="text-2xl font-semibold">{caloriesBurned}</span>
+                        <span className="text-sm text-muted-foreground ml-2">kcal</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Kalori Dengesi</h4>
+                    <div className="p-4 bg-muted/50 rounded-md">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm">Kalori Açığı</span>
+                        <span className="font-medium">{calculateWeightLoss().calorieDeficit} kcal</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Tahmini Kilo Kaybı</span>
+                        <span className="font-medium">{calculateWeightLoss().weightLoss} kg</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="text-sm font-medium">Su Tüketimi</h4>
+                      <div className="flex items-center gap-1">
+                        <Button variant="outline" size="sm" onClick={() => addWater(200)}>
+                          +200ml
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => addWater(500)}>
+                          +500ml
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Droplet className="h-5 w-5 text-blue-500" />
+                      <Progress value={(waterIntake / 2500) * 100} className="h-2.5 flex-1" />
+                      <span className="text-sm font-medium">{waterIntake}ml</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold">Besin Makroları</h3>
+                  <Button variant="outline" size="sm" onClick={() => setShowAddMeal(true)}>
+                    <Utensils className="mr-2 h-4 w-4" />
+                    Öğün Ekle
+                  </Button>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="h-[200px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={macroData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={2}
+                          dataKey="value"
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        >
+                          {macroData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Kalori Trendi</h4>
+                    <div className="h-[200px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={calorieData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="day" />
+                          <YAxis />
+                          <Legend />
+                          <Line 
+                            type="monotone" 
+                            dataKey="consumed" 
+                            name="Tüketilen" 
+                            stroke="#8884d8" 
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="burned" 
+                            name="Yakılan" 
+                            stroke="#82ca9d" 
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="target" 
+                            name="Hedef" 
+                            stroke="#ff8042" 
+                            strokeDasharray="5 5" 
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Add Meal Dialog */}
+          <Dialog open={showAddMeal} onOpenChange={setShowAddMeal}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Öğün Ekle</DialogTitle>
+                <DialogDescription>
+                  Bugün tükettiğiniz bir öğünü seçin veya yeni bir öğün oluşturun.
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="meal">Hazır Öğünler</Label>
+                  <Select
+                    value={selectedMeal || ""}
+                    onValueChange={setSelectedMeal}
+                  >
+                    <SelectTrigger id="meal">
+                      <SelectValue placeholder="Bir öğün seçin" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mockMeals.map(meal => (
+                        <SelectItem key={meal.id} value={meal.id}>
+                          {meal.name} ({meal.calories} kcal)
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowAddMeal(false)}>
+                  İptal
+                </Button>
+                <Button onClick={addSelectedMeal} disabled={!selectedMeal}>
+                  Ekle
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </TabsContent>
+        
+        {/* Cardio Tab */}
+        <TabsContent value="cardio">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-4">Kardiyo Aktivitesi Ekle</h3>
+                
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="cardioType">Aktivite Türü</Label>
+                      <Select
+                        value={cardioType}
+                        onValueChange={(value: 'Yürüyüş' | 'Bisiklet' | 'Koşu') => setCardioType(value)}
+                      >
+                        <SelectTrigger id="cardioType">
+                          <SelectValue placeholder="Aktivite seçin" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Yürüyüş">Yürüyüş</SelectItem>
+                          <SelectItem value="Bisiklet">Bisiklet</SelectItem>
+                          <SelectItem value="Koşu">Koşu</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="intensity">Yoğunluk</Label>
+                      <Select
+                        value={cardioIntensity}
+                        onValueChange={(value: 'Düşük' | 'Orta' | 'Yüksek') => setCardioIntensity(value)}
+                      >
+                        <SelectTrigger id="intensity">
+                          <SelectValue placeholder="Yoğunluk seçin" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Düşük">Düşük</SelectItem>
+                          <SelectItem value="Orta">Orta</SelectItem>
+                          <SelectItem value="Yüksek">Yüksek</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="distance">Mesafe (km)</Label>
+                      <Input
+                        id="distance"
+                        type="number"
+                        min={0}
+                        value={cardioDistance.toString()}
+                        onChange={(e) => setCardioDistance(Number(e.target.value))}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="duration">Süre (dakika)</Label>
+                      <Input
+                        id="duration"
+                        type="number"
+                        min={0}
+                        value={cardioDuration.toString()}
+                        onChange={(e) => setCardioDuration(Number(e.target.value))}
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button onClick={calculateCardioCalories} className="w-full">
+                    <Bike className="mr-2 h-4 w-4" />
+                    Aktiviteyi Kaydet
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-4">Son Kardiyo Aktiviteleri</h3>
+                <div className="space-y-4">
+                  <div className="h-[200px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={cardioHistoryData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="day" />
+                        <YAxis label={{ value: 'Dakika', angle: -90, position: 'insideLeft' }} />
+                        <Legend />
+                        <Bar dataKey="yürüyüş" name="Yürüyüş" fill="#8884d8" />
+                        <Bar dataKey="bisiklet" name="Bisiklet" fill="#82ca9d" />
+                        <Bar dataKey="koşu" name="Koşu" fill="#ffc658" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium mb-2">Son Aktiviteler</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Tarih</TableHead>
+                          <TableHead>Tür</TableHead>
+                          <TableHead>Süre</TableHead>
+                          <TableHead>Mesafe</TableHead>
+                          <TableHead className="text-right">Kalori</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockCardioActivities.slice(0, 5).map((activity) => (
+                          <TableRow key={activity.id}>
+                            <TableCell className="font-medium">{activity.date}</TableCell>
+                            <TableCell>{activity.type}</TableCell>
+                            <TableCell>{activity.duration} dk</TableCell>
+                            <TableCell>{activity.distance} km</TableCell>
+                            <TableCell className="text-right">{activity.caloriesBurned} kcal</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        {/* Progress Tab */}
+        <TabsContent value="progress">
+          <div className="grid grid-cols-1 gap-6">
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-4">Kilo İlerlemesi</h3>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={weightData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="week" />
+                      <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="weight" 
+                        name="Kilo (kg)" 
+                        stroke="#8884d8" 
+                        strokeWidth={2}
+                        dot={{ r: 4 }}
+                        activeDot={{ r: 8 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-4">Antrenman İlerlemesi</h3>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={progressData} margin={{ right: 30 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" />
+                      <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                      <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                      <Legend />
+                      <Line 
+                        yAxisId="left"
+                        type="monotone" 
+                        dataKey="weight" 
+                        name="Ağırlık (kg)" 
+                        stroke="#8884d8" 
+                        strokeWidth={2}
+                      />
+                      <Line 
+                        yAxisId="right"
+                        type="monotone" 
+                        dataKey="reps" 
+                        name="Tekrar Sayısı" 
+                        stroke="#82ca9d" 
+                        strokeWidth={2}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold">Kilo Hedefi</h3>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Mevcut Kilo</p>
+                      <div className="flex items-center">
+                        <Weight className="h-5 w-5 mr-2 text-primary" />
+                        <Input
+                          type="number"
+                          value={currentWeight}
+                          onChange={(e) => setCurrentWeight(Number(e.target.value))}
+                          className="max-w-[100px]"
+                        />
+                        <span className="text-sm ml-2">kg</span>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Hedef Kilo</p>
+                      <div className="flex items-center">
+                        <PersonStanding className="h-5 w-5 mr-2 text-primary" />
+                        <Input
+                          type="number"
+                          value={targetWeight}
+                          onChange={(e) => setTargetWeight(Number(e.target.value))}
+                          className="max-w-[100px]"
+                        />
+                        <span className="text-sm ml-2">kg</span>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">İlerleme</p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">
+                            {Math.abs(currentWeight - targetWeight).toFixed(1)} kg {currentWeight > targetWeight ? 'verilecek' : 'alınacak'}
+                          </span>
+                          <span className="text-sm font-medium">
+                            {Math.round((Math.abs(70 - currentWeight) / Math.abs(70 - targetWeight)) * 100)}%
+                          </span>
+                        </div>
+                        <Progress 
+                          value={Math.round((Math.abs(70 - currentWeight) / Math.abs(70 - targetWeight)) * 100)} 
+                          className="h-2.5" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/50 rounded-md p-4">
+                    <h4 className="text-sm font-medium mb-2">Tahminler</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Günlük Kalori İhtiyacı:</span>
+                        <span className="font-medium">2000 kcal</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Tavsiye Edilen Protein:</span>
+                        <span className="font-medium">{Math.round(currentWeight * 1.6)} g</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Tavsiye Edilen Su:</span>
+                        <span className="font-medium">{Math.round(currentWeight * 35)} ml</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Haftalık Kilo Hedefi:</span>
+                        <span className="font-medium">0.5 kg</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm">Tahmini Süre:</span>
+                        <span className="font-medium">
+                          {Math.ceil(Math.abs(currentWeight - targetWeight) / 0.5)} hafta
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        {/* Notes Tab */}
+        <TabsContent value="notes">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Antrenman Notları</h3>
+                {editingNotes ? (
+                  <Button variant="outline" size="sm" onClick={saveNotes}>
+                    <Save className="mr-2 h-4 w-4" />
+                    Kaydet
+                  </Button>
+                ) : (
+                  <Button variant="outline" size="sm" onClick={() => setEditingNotes(true)}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Düzenle
+                  </Button>
+                )}
+              </div>
+              
+              {editingNotes ? (
+                <Textarea
+                  value={workoutNotes}
+                  onChange={(e) => setWorkoutNotes(e.target.value)}
+                  placeholder="Antrenman hakkında notlarınızı buraya yazabilirsiniz..."
+                  className="min-h-[200px]"
+                />
+              ) : (
+                <div className="min-h-[200px] p-4 bg-muted/50 rounded-md">
+                  {workoutNotes ? (
+                    <p>{workoutNotes}</p>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      Henüz not eklenmemiş. Antrenman hakkında aklınızda kalanları not almanız ilerlemenizi takip etmenize yardımcı olabilir.
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default WorkoutDetail;
