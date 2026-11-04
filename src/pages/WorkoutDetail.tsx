@@ -7,7 +7,9 @@ import {
   CheckCircle2, XCircle, ImagePlus, Pencil, Save, Bike, Utensils, 
   Weight, HelpCircle, Flame, PersonStanding, Droplet
 } from 'lucide-react';
-import { mockWorkouts, mockMeals, mockCardioActivities } from '@/data/mockWorkouts';
+import { mockWorkouts } from '@/data/mockWorkouts';
+import { mockMeals } from '@/data/mockMeals';
+import { mockCardioActivities } from '@/data/mockCardioActivities';
 import { toast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
