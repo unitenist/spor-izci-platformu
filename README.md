@@ -1,5 +1,7 @@
 # Spor İzci Platformu
 
+🔗 **Canlı demo:** https://spor-izci-platformu-1u2f.vercel.app
+
 Antrenman, günlük aktivite ve beslenme takibini tek yerde toplayan web uygulaması. React, TypeScript ve shadcn/ui ile geliştirilmiştir.
 
 ## Özellikler
