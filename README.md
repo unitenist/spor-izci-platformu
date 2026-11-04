@@ -1,59 +1,57 @@
-# Welcome to your Lovable project
+# Spor İzci Platformu
 
-## Project info
+Antrenman, günlük aktivite ve beslenme takibini tek yerde toplayan web uygulaması. React, TypeScript ve shadcn/ui ile geliştirilmiştir.
 
-**URL**: https://lovable.dev/projects/54b2b215-2bbe-44aa-a67a-8945814ea918
+## Özellikler
 
-## How can I edit this code?
+- **Kontrol paneli** — günlük özet ve ilerleme
+- **Antrenmanlar** — antrenman listesi, detay sayfası ve yeni antrenman oluşturma
+- **Günlük aktiviteler** — gün içi hareket ve aktivite kaydı
+- **Öğün planlayıcı** — haftalık beslenme planı
+- **Profil** — kullanıcı bilgileri ve hedefler
+- **Kayıt / Giriş** ekranları
 
-There are several ways of editing your application.
+## Teknolojiler
 
-Changes made via Lovable will be committed automatically to this repo.
+| Katman | Araç |
+|---|---|
+| Arayüz | React 18, TypeScript |
+| Derleme | Vite |
+| Bileşenler | shadcn/ui (Radix UI) |
+| Stil | Tailwind CSS |
+| Formlar | React Hook Form |
 
-**Use your preferred IDE**
+## Kurulum
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Gereksinim: Node.js 18+ ve npm.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+git clone https://github.com/unitenist/spor-izci-platformu.git
+cd spor-izci-platformu
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Komutlar
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Komut | Açıklama |
+|---|---|
+| `npm run dev` | Geliştirme sunucusunu başlatır |
+| `npm run build` | Üretim derlemesi alır |
+| `npm run preview` | Derlemeyi yerelde önizler |
+| `npm run lint` | ESLint kontrolü yapar |
 
-**Use GitHub Codespaces**
+## Proje yapısı
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+src/
+├── components/   # Ortak arayüz bileşenleri
+├── pages/        # Sayfalar (Dashboard, Workouts, MealPlanner …)
+└── ...
+```
 
-## What technologies are used for this project?
+## Çalışma akışı
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-
+- `main` her zaman çalışır durumdadır; doğrudan push yapılmaz.
+- Yeni özellikler `feature/<kısa-ad>`, hata düzeltmeleri `fix/<kısa-ad>` branch'lerinde geliştirilir.
+- Değişiklikler Pull Request ile `main`'e birleştirilir.
